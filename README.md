@@ -37,4 +37,5 @@ Per-game state is stored in the database (no globals), the UI calls JSON endpoin
 
 ---
 
-## Project Structure
+## Click the link to view and play the game
+http://127.0.0.1:8000/g/a02a815f-66eb-4427-a4c6-928bb3baf826/
