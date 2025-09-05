@@ -3,44 +3,41 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f0f0f0;
-
-  /* center the page content */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;      /* horizontal center */
-  min-height: 100vh;
+  align-items: center;
 }
 
-h1 { margin-top: 32px; }
+h1 { margin: 32px 0 8px; }
 
 #game {
   display: grid;
   grid-template-columns: repeat(3, 120px);
   grid-template-rows: repeat(3, 120px);
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 .cell {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eee;
-  font-size: 2.5rem;
-  cursor: pointer;
+  width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  background: #eee;
   border: 2px solid #333;
+  font-size: 2.5rem; cursor: pointer;
 }
 
-#status {
-  margin: 24px 0 12px;
-  font-weight: 600;
+#status { 
+  margin: 18px 0 10px; 
+  font-weight: 600; 
 }
 
-/* when game is over, freeze board */
-#game.disabled .cell {
-  pointer-events: none;
-  opacity: 0.7;
+#game.disabled .cell { 
+  pointer-events: none; 
+  opacity: 0.7; 
 }
 
+.cell.win { 
+  background: #c9f7c5; 
+  border-color: #1a7f37; 
+}

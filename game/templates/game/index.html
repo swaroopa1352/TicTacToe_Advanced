@@ -1,20 +1,33 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <title>Tic Tac Toe</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'game/favicon-32x32.png' %}">
+  <link rel="icon" sizes="32x32" href="{% static 'game/favicon-32x32.png' %}" type="image/svg+xml">
   <link rel="stylesheet" href="{% static 'game/style.css' %}">
 </head>
 <body>
   <h1>Tic Tac Toe</h1>
-  <div id="game">
+
+  <div style="margin-bottom:10px;">
+    <a href="{% url 'home' %}">New 2-Player</a> |
+    <a href="{% url 'home' %}?vs=ai&ai=O&diff=easy">AI=O (Easy)</a> |
+    <a href="{% url 'home' %}?vs=ai&ai=O&diff=medium">AI=O (Medium)</a> |
+    <a href="{% url 'home' %}?vs=ai&ai=O&diff=hard">AI=O (Hard)</a> |
+    <a href="{% url 'home' %}?vs=ai&ai=X&diff=hard">AI=X (Hard)</a>
+  </div>
+
+  <div id="game"
+       data-state-url="{% url 'state' game.id %}"
+       data-move-url="{% url 'move' game.id %}"
+       data-restart-url="{% url 'restart' game.id %}">
     {% for i in "012345678" %}
       <div class="cell" data-index="{{ i }}"></div>
     {% endfor %}
   </div>
-  <p id="status">Player X's turn</p>
+
+  <p id="status">Loading…</p>
   <button id="restart">Restart</button>
 
   <script src="{% static 'game/script.js' %}"></script>
