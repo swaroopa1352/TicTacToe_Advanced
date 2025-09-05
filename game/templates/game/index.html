@@ -6,30 +6,47 @@
   <title>Tic Tac Toe</title>
   <link rel="icon" sizes="32x32" href="{% static 'game/favicon-32x32.png' %}" type="image/svg+xml">
   <link rel="stylesheet" href="{% static 'game/style.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <h1>Tic Tac Toe</h1>
+  <main class="app">
+    <header class="header">
+      <h1>Tic Tac Toe</h1>
+      <nav class="toolbar">
+        <a class="btn" href="{% url 'home' %}">New 2-Player</a>
+        <a class="btn" href="{% url 'home' %}?vs=ai&ai=O&diff=easy">AI=O (Easy)</a>
+        <a class="btn" href="{% url 'home' %}?vs=ai&ai=O&diff=medium">AI=O (Medium)</a>
+        <a class="btn" href="{% url 'home' %}?vs=ai&ai=O&diff=hard">AI=O (Hard)</a>
+        <a class="btn btn--accent" href="{% url 'home' %}?vs=ai&ai=X&diff=hard">AI=X (Hard)</a>
+      </nav>
+    </header>
 
-  <div style="margin-bottom:10px;">
-    <a href="{% url 'home' %}">New 2-Player</a> |
-    <a href="{% url 'home' %}?vs=ai&ai=O&diff=easy">AI=O (Easy)</a> |
-    <a href="{% url 'home' %}?vs=ai&ai=O&diff=medium">AI=O (Medium)</a> |
-    <a href="{% url 'home' %}?vs=ai&ai=O&diff=hard">AI=O (Hard)</a> |
-    <a href="{% url 'home' %}?vs=ai&ai=X&diff=hard">AI=X (Hard)</a>
-  </div>
+    <section class="board-wrap">
+      <div id="game"
+           class="board"
+           data-state-url="{% url 'state' game.id %}"
+           data-move-url="{% url 'move' game.id %}"
+           data-restart-url="{% url 'restart' game.id %}">
+        {% for i in "012345678" %}
+          <button class="cell" data-index="{{ i }}" aria-label="Cell {{ i|add:1 }}"></button>
+        {% endfor %}
+      </div>
 
-  <div id="game"
-       data-state-url="{% url 'state' game.id %}"
-       data-move-url="{% url 'move' game.id %}"
-       data-restart-url="{% url 'restart' game.id %}">
-    {% for i in "012345678" %}
-      <div class="cell" data-index="{{ i }}"></div>
-    {% endfor %}
-  </div>
+      <p id="status" class="status">Loading…</p>
+      <button id="restart" class="btn btn--ghost">Restart</button>
 
-  <p id="status">Loading…</p>
-  <button id="restart">Restart</button>
+      <!-- small overlay spinner while waiting on server/AI -->
+      <div id="overlay" class="overlay hidden" aria-hidden="true">
+        <div class="spinner" role="status" aria-label="Thinking…"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Built with Django • Vanilla HTML/CSS/JS</span>
+    </footer>
+  </main>
 
   <script src="{% static 'game/script.js' %}"></script>
 </body>
 </html>
+

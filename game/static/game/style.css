@@ -1,43 +1,152 @@
-/* static/game/style.css */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ---------- Theme ---------- */
+:root{
+  --bg: #0f1221;
+  --bg-soft: #141830;
+  --card: #1a1f3b;
+  --line: #2a2f55;
+  --text: #eef1ff;
+  --muted: #bbc2ff;
+  --accent: #6e8bff;
+  --accent2: #7ad1b7;
+  --x: #ff6b81;
+  --o: #58d6ff;
+  --win: #a5ffb1;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
-h1 { margin: 32px 0 8px; }
+/* ---------- Layout ---------- */
+*{ box-sizing: border-box }
+html,body{ height:100% }
 
-#game {
-  display: grid;
-  grid-template-columns: repeat(3, 120px);
-  grid-template-rows: repeat(3, 120px);
-  gap: 10px;
-  margin-top: 16px;
+html {
+  background-color: #0e1124;     /* dark fallback instead of white */
+  color-scheme: dark;            /* nicer scrollbars on Win/mac */
+  overscroll-behavior: none;  /* prevent rubber-band white glow */
+}
+body{
+  margin:0;
+  min-height: 100svh;    /* cover viewport on mobile too */
+  overflow-x: hidden; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center;           /* stop tiny horizontal gutter */
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 800px at 10% 20%, #131731, transparent 60%),
+    radial-gradient(1000px 800px at 90% 10%, #0f1730, transparent 60%),
+    linear-gradient(180deg, var(--bg), #0e1124);
+  background-attachment: fixed, fixed, fixed;  /* 👈 key line */
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.cell {
-  width: 120px; height: 120px;
-  display: flex; align-items: center; justify-content: center;
-  background: #eee;
-  border: 2px solid #333;
-  font-size: 2.5rem; cursor: pointer;
+.app{
+  width:min(100%, 980px);
+  padding:24px;
+  min-height: 100svh;
 }
 
-#status { 
-  margin: 18px 0 10px; 
-  font-weight: 600; 
+.header h1{
+  text-align:center;
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing:.5px;
+  margin: 0 0 14px;
 }
 
-#game.disabled .cell { 
-  pointer-events: none; 
-  opacity: 0.7; 
+.toolbar{
+  display:flex; flex-wrap:wrap;
+  justify-content:center; gap:10px;
+  margin-bottom: 22px;
 }
 
-.cell.win { 
-  background: #c9f7c5; 
-  border-color: #1a7f37; 
+/* ---------- Buttons ---------- */
+.btn{
+  appearance:none; border:1px solid transparent;
+  padding:10px 14px; border-radius:12px;
+  background: var(--bg-soft);
+  color:var(--text); text-decoration:none; font-weight:600;
+  transition:.2s ease; box-shadow: var(--shadow);
+}
+.btn:hover{ transform: translateY(-1px); border-color: var(--line); }
+.btn:active{ transform: translateY(0); }
+.btn--accent{ background: linear-gradient(135deg, var(--accent), var(--accent2)); color:#0a0d1f; }
+.btn--ghost{ background: transparent; border-color: var(--line); }
+
+/* ---------- Board ---------- */
+.board-wrap{
+  position:relative;
+  margin-inline:auto;
+  background: rgba(26,31,59,.6);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding: clamp(16px, 3vw, 28px);
+  box-shadow: var(--shadow);
+  max-width: 560px;
+}
+
+.board{
+  width: min(92vw, 480px);
+  margin: 0 auto 14px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2vw, 14px);
+}
+
+.cell{
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #22264b, #171b37);
+  border: 1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-size: clamp(40px, 10vw, 64px);
+  font-weight: 800; letter-spacing: .5px;
+  cursor: pointer;
+  color: var(--text);
+  transition: transform .12s ease, box-shadow .12s ease, background .2s;
+  box-shadow: inset 0 -4px 14px rgba(0,0,0,.35);
+}
+.cell:hover{ transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 18px rgba(0,0,0,.25); }
+.cell:active{ transform: scale(.98); }
+
+.cell.x{ color: var(--x); text-shadow: 0 0 18px rgba(255,107,129,.35); }
+.cell.o{ color: var(--o); text-shadow: 0 0 18px rgba(88,214,255,.35); }
+
+.cell.win{
+  background: linear-gradient(180deg, #12341f, #0c2517);
+  border-color: #1a7f37;
+  animation: glow .9s ease-in-out infinite alternate;
+}
+@keyframes glow { from{ box-shadow:0 0 6px rgba(165,255,177,.35)} to{ box-shadow:0 0 18px rgba(165,255,177,.75)} }
+
+.cell.pulse{ animation: pulse .35s ease }
+@keyframes pulse{ 0%{ transform: scale(1.05)} 100%{ transform: scale(1)} }
+
+.status{
+  text-align:center; margin: 8px 0 12px;
+  color: var(--muted); font-weight:700;
+}
+
+/* disable clicks when game over */
+.board.disabled .cell{ pointer-events:none; opacity:.85; }
+
+/* ---------- Overlay Spinner ---------- */
+.overlay{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background: rgba(10,12,24,.25); border-radius:20px; backdrop-filter: blur(2px);
+}
+.hidden{ display:none; }
+.spinner{
+  width:36px; height:36px; border-radius:50%;
+  border:4px solid rgba(255,255,255,.15);
+  border-top-color: var(--accent);
+  animation: spin .9s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg) } }
+
+/* ---------- Footer ---------- */
+.footer{
+  margin-top: 14px;
+  text-align:center; color:#9aa3ff; font-size: .9rem;
+  opacity:.8;
 }
