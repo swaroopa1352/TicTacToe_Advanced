@@ -25,7 +25,6 @@ Per-game state is stored in the database (no globals), the UI calls JSON endpoin
 - HTML5 (Django Template Language)
 - CSS3 (custom responsive styles)
 - JavaScript (ES6) + Fetch API
-- SVG favicon
 
 **Backend**
 - Python 3
