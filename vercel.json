@@ -4,7 +4,7 @@
     { "src": "tic_tac_toe_advanced/wsgi.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "tictactoe/wsgi.py" }
+    { "src": "/(.*)", "dest": "tic_tac_toe_advanced/wsgi.py" }
   ]
 }
 
