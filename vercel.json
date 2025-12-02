@@ -1,7 +1,7 @@
 {
   "version": 2,
   "builds": [
-    { "src": "tictactoe/wsgi.py", "use": "@vercel/python" }
+    { "src": "tic_tac_toe_advanced/wsgi.py", "use": "@vercel/python" }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "tictactoe/wsgi.py" }
